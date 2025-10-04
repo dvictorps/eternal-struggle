@@ -11,19 +11,25 @@ const server = new McpServer({
   version: '1.0.0',
 })
 
-server.registerTool(
-  'addTodo',
-  {
-    title: 'Tool to add a todo to a list of todos',
-    description: 'Add a todo to a list of todos',
-    inputSchema: {
-      title: z.string().describe('The title of the todo'),
-    },
-  },
-  ({ title }) => ({
-    content: [{ type: 'text', text: String(addTodo(title)) }],
-  }),
-)
+// server.registerTool(
+//   'addTodo',
+//   {
+//     title: 'Tool to add a todo to a list of todos',
+//     description: 'Add a todo to a list of todos',
+//     inputSchema: {
+//       title: {
+//         _type: 'string',
+//         _output: 'The title of the todo',
+//         _input: 'The title of the todo',
+//         description: 'The title of the todo',
+
+//       },
+//     },
+//   },
+//   ({ title }) => ({
+//     content: [{ type: 'text', text: String(addTodo(title)) }],
+//   }),
+// )
 
 // server.registerResource(
 //   "counter-value",

@@ -11,6 +11,23 @@ export default defineSchema({
     strength: v.number(),
     dexterity: v.number(),
     intelligence: v.number(),
+    profileId: v.string(),
+    currentXp: v.number(),
+    currentHp: v.number(),
+    currentMp: v.number(),
+    currentStrength: v.number(),
+    currentDexterity: v.number(),
+    currentIntelligence: v.number(),
+    currentLocation: v.string(),
+    characterClass: v.string(),
   }),
-
+  characterClasses: defineTable({
+    name: v.string(),
+    strength: v.number(),
+    dexterity: v.number(),
+    intelligence: v.number(),
+    hp: v.number(),
+    mp: v.number(),
+  }),
 })
+

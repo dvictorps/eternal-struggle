@@ -25,6 +25,9 @@ export const create = mutation({
         strength: v.number(),
         dexterity: v.number(),
         intelligence: v.number(),
+        profileId: v.string(),
+        currentLocation: v.string(),
+        characterClass: v.string(),
     },
     handler: async (ctx, args) => {
         const id = await ctx.db.insert('characters', {
@@ -36,6 +39,15 @@ export const create = mutation({
             strength: args.strength,
             dexterity: args.dexterity,
             intelligence: args.intelligence,
+            profileId: args.profileId,
+            currentXp: args.xp,
+            currentHp: args.hp,
+            currentMp: args.mp,
+            currentStrength: args.strength,
+            currentDexterity: args.dexterity,
+            currentIntelligence: args.intelligence,
+            currentLocation: args.currentLocation,
+            characterClass: args.characterClass,
         })
 
         return await ctx.db.get(id)
