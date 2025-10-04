@@ -1,7 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'convex/react'
-import { api } from '../../convex/_generated/api'
-import { Swords, Users, Plus, TrendingUp } from 'lucide-react'
+
 
 export const Route = createFileRoute('/')({
   component: HomePage,

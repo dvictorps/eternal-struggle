@@ -12,6 +12,8 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import ClerkProvider from '../integrations/clerk/provider'
 
+import '@fontsource/jersey-15'
+
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
