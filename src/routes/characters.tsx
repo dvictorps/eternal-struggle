@@ -3,7 +3,7 @@ import { api } from '../../convex/_generated/api'
 import { ArrowLeftIcon, PlusIcon } from 'lucide-react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
-import { useUser } from '@clerk/clerk-react'
+// Removed Clerk
 
 export const Route = createFileRoute('/characters')({
     component: Characters,
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/characters')({
 
 function Characters() {
 
-    const { user } = useUser()
+    // const user = undefined
 
     const createCharacter = useMutation(api.characters.create)
 

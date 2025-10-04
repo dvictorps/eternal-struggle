@@ -10,7 +10,7 @@ import ConvexProvider from '../integrations/convex/provider'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
-import ClerkProvider from '../integrations/clerk/provider'
+// Clerk removed
 
 import '@fontsource/jersey-15'
 
@@ -18,6 +18,7 @@ import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { ThemeProvider } from '@/components/theme-provider'
+// Better Auth TanStack Start handler not required here
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -56,24 +57,21 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ConvexProvider>
-          <ClerkProvider>
-            <ThemeProvider defaultTheme='dark'>
-              {children}
-            </ThemeProvider>
-            <TanStackDevtools
-              config={{
-                position: 'bottom-right',
-              }}
-              plugins={[
-                {
-                  name: 'Tanstack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-                TanStackQueryDevtools,
-              ]}
-            />
-
-          </ClerkProvider>
+          <ThemeProvider defaultTheme='dark'>
+            {children}
+          </ThemeProvider>
+          <TanStackDevtools
+            config={{
+              position: 'bottom-right',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              TanStackQueryDevtools,
+            ]}
+          />
         </ConvexProvider>
         <Scripts />
       </body>
