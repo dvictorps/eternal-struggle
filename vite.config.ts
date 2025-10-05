@@ -10,13 +10,16 @@ const config = defineConfig({
   plugins: [
     tanstackRouter({
       autoCodeSplitting: true,
+      routesDirectory: './src/routes', // 👈 ajuste conforme seu caminho real
+      generatedRouteTree: './src/routeTree.gen.ts', // 👈 garante regeneração
     }),
+    tanstackStart(),
     nitroV2Plugin(),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    tanstackStart(),
+
     viteReact(),
   ],
 })
