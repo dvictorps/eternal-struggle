@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -19,15 +17,9 @@ import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
 import { Route as AdminLayoutRouteImport } from './routes/admin/_layout'
 import { Route as AdminLayoutIndexRouteImport } from './routes/admin/_layout.index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
+import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout.users'
 import { Route as AdminLayoutClassRouteImport } from './routes/admin/_layout.class'
 
-const AdminRouteImport = createFileRoute('/admin')()
-
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -67,6 +59,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLayoutUsersRoute = AdminLayoutUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminLayoutRoute,
+} as any)
 const AdminLayoutClassRoute = AdminLayoutClassRouteImport.update({
   id: '/class',
   path: '/class',
@@ -81,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminLayoutRouteWithChildren
   '/sign-in/$': typeof SignInSplatRoute
   '/admin/class': typeof AdminLayoutClassRoute
+  '/admin/users': typeof AdminLayoutUsersRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/': typeof AdminLayoutIndexRoute
 }
@@ -89,10 +87,11 @@ export interface FileRoutesByTo {
   '/characters': typeof CharactersRoute
   '/mcp': typeof McpRoute
   '/register': typeof RegisterRoute
-  '/admin': typeof AdminLayoutIndexRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/admin/class': typeof AdminLayoutClassRoute
+  '/admin/users': typeof AdminLayoutUsersRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin': typeof AdminLayoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,10 +99,10 @@ export interface FileRoutesById {
   '/characters': typeof CharactersRoute
   '/mcp': typeof McpRoute
   '/register': typeof RegisterRoute
-  '/admin': typeof AdminRouteWithChildren
   '/admin/_layout': typeof AdminLayoutRouteWithChildren
   '/sign-in/$': typeof SignInSplatRoute
   '/admin/_layout/class': typeof AdminLayoutClassRoute
+  '/admin/_layout/users': typeof AdminLayoutUsersRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/_layout/': typeof AdminLayoutIndexRoute
 }
@@ -117,6 +116,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/sign-in/$'
     | '/admin/class'
+    | '/admin/users'
     | '/api/auth/$'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -125,20 +125,21 @@ export interface FileRouteTypes {
     | '/characters'
     | '/mcp'
     | '/register'
-    | '/admin'
     | '/sign-in/$'
     | '/admin/class'
+    | '/admin/users'
     | '/api/auth/$'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/characters'
     | '/mcp'
     | '/register'
-    | '/admin'
     | '/admin/_layout'
     | '/sign-in/$'
     | '/admin/_layout/class'
+    | '/admin/_layout/users'
     | '/api/auth/$'
     | '/admin/_layout/'
   fileRoutesById: FileRoutesById
@@ -148,20 +149,12 @@ export interface RootRouteChildren {
   CharactersRoute: typeof CharactersRoute
   McpRoute: typeof McpRoute
   RegisterRoute: typeof RegisterRoute
-  AdminRoute: typeof AdminRouteWithChildren
   SignInSplatRoute: typeof SignInSplatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -199,7 +192,7 @@ declare module '@tanstack/react-router' {
     }
     '/admin/_layout': {
       id: '/admin/_layout'
-      path: '/admin'
+      path: ''
       fullPath: '/admin'
       preLoaderRoute: typeof AdminLayoutRouteImport
       parentRoute: typeof AdminRoute
@@ -218,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/_layout/users': {
+      id: '/admin/_layout/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminLayoutUsersRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
     '/admin/_layout/class': {
       id: '/admin/_layout/class'
       path: '/class'
@@ -228,36 +228,11 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AdminLayoutRouteChildren {
-  AdminLayoutClassRoute: typeof AdminLayoutClassRoute
-  AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
-}
-
-const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
-  AdminLayoutClassRoute: AdminLayoutClassRoute,
-  AdminLayoutIndexRoute: AdminLayoutIndexRoute,
-}
-
-const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
-  AdminLayoutRouteChildren,
-)
-
-interface AdminRouteChildren {
-  AdminLayoutRoute: typeof AdminLayoutRouteWithChildren
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminLayoutRoute: AdminLayoutRouteWithChildren,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CharactersRoute: CharactersRoute,
   McpRoute: McpRoute,
   RegisterRoute: RegisterRoute,
-  AdminRoute: AdminRouteWithChildren,
   SignInSplatRoute: SignInSplatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

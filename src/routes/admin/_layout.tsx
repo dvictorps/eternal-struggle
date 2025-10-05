@@ -4,7 +4,7 @@ import { api } from "convex/_generated/api"
 import { useConvexAuth } from "convex/react"
 import { useQuery } from "convex/react"
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { AdminSidebar } from "./components/sidebar"
+import { AdminSidebar } from "../../components/admin/sidebar"
 
 export const Route = createFileRoute('/admin/_layout')({
   component: AdminLayout,

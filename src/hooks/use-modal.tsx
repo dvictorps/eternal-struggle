@@ -1,4 +1,4 @@
-import { useState, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -19,7 +19,15 @@ interface ModalState extends ModalOptions {
     isOpen: boolean
 }
 
-export function useModal() {
+interface ModalContextValue {
+    openModal: (options: ModalOptions) => void
+    closeModal: () => void
+    isOpen: boolean
+}
+
+const ModalContext = createContext<ModalContextValue | undefined>(undefined)
+
+export function ModalProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<ModalState>({
         isOpen: false,
         title: '',
@@ -44,8 +52,9 @@ export function useModal() {
         setState((prev) => ({ ...prev, isOpen: false }))
     }, [state.onClose])
 
-    const Modal = useCallback(() => {
-        return (
+    return (
+        <ModalContext.Provider value={{ openModal, closeModal, isOpen: state.isOpen }}>
+            {children}
             <Dialog open={state.isOpen} onOpenChange={(open) => {
                 if (!open) {
                     closeModal()
@@ -61,14 +70,14 @@ export function useModal() {
                     {state.content}
                 </DialogContent>
             </Dialog>
-        )
-    }, [state, closeModal])
-
-    return {
-        openModal,
-        closeModal,
-        Modal,
-        isOpen: state.isOpen,
-    }
+        </ModalContext.Provider>
+    )
 }
 
+export function useModal() {
+    const context = useContext(ModalContext)
+    if (!context) {
+        throw new Error('useModal must be used within a ModalProvider')
+    }
+    return context
+}

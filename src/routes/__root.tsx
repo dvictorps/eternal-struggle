@@ -19,6 +19,8 @@ import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from 'sonner'
+import { ModalProvider } from '@/hooks/use-modal'
+import { AlertModalProvider } from '@/hooks/use-alert-modal'
 // Better Auth TanStack Start handler not required here
 
 interface MyRouterContext {
@@ -67,7 +69,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <ConvexProvider>
           <ThemeProvider defaultTheme='dark'>
-            {children}
+            <ModalProvider>
+              <AlertModalProvider>
+                {children}
+              </AlertModalProvider>
+            </ModalProvider>
           </ThemeProvider>
           <TanStackDevtools
             config={{

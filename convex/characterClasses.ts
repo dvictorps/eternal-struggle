@@ -22,6 +22,14 @@ export const create = mutation({
     },
 })
 
+export const update = mutation({
+    args: { id: v.id('characterClasses'), name: v.string(), strength: v.number(), dexterity: v.number(), intelligence: v.number(), hp: v.number(), mp: v.number() },
+    handler: async (ctx, args) => {
+        const { id, ...data } = args
+        return await ctx.db.patch(id, data)
+    },
+})
+
 export const remove = mutation({
     args: { id: v.id('characterClasses') },
     handler: async (ctx, args) => {

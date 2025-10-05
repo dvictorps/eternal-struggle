@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -24,7 +24,16 @@ interface AlertModalState extends AlertModalOptions {
     isLoading: boolean
 }
 
-export function useAlertModal() {
+interface AlertModalContextValue {
+    openAlertModal: (options: AlertModalOptions) => void
+    closeAlertModal: () => void
+    isOpen: boolean
+    isLoading: boolean
+}
+
+const AlertModalContext = createContext<AlertModalContextValue | undefined>(undefined)
+
+export function AlertModalProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<AlertModalState>({
         isOpen: false,
         isLoading: false,
@@ -75,8 +84,16 @@ export function useAlertModal() {
         closeAlertModal()
     }, [state.onCancel, closeAlertModal])
 
-    const AlertModal = useCallback(() => {
-        return (
+    return (
+        <AlertModalContext.Provider
+            value={{
+                openAlertModal,
+                closeAlertModal,
+                isOpen: state.isOpen,
+                isLoading: state.isLoading,
+            }}
+        >
+            {children}
             <Dialog open={state.isOpen} onOpenChange={(open) => {
                 if (!open && !state.isLoading) {
                     handleCancel()
@@ -105,15 +122,14 @@ export function useAlertModal() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        )
-    }, [state, handleConfirm, handleCancel])
-
-    return {
-        openAlertModal,
-        closeAlertModal,
-        AlertModal,
-        isOpen: state.isOpen,
-        isLoading: state.isLoading,
-    }
+        </AlertModalContext.Provider>
+    )
 }
 
+export function useAlertModal() {
+    const context = useContext(AlertModalContext)
+    if (!context) {
+        throw new Error('useAlertModal must be used within an AlertModalProvider')
+    }
+    return context
+}
