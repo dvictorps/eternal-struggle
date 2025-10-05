@@ -29,5 +29,9 @@ export default defineSchema({
     hp: v.number(),
     mp: v.number(),
   }),
+  admins: defineTable({
+    userId: v.string(),
+  }).index('userId', ['userId']),
+
 })
 

@@ -8,7 +8,9 @@
  * @module
  */
 
+import type * as admin from "../admin.js";
 import type * as characters from "../characters.js";
+import type * as env from "../env.js";
 import type * as http from "../http.js";
 import type * as server_auth from "../server/auth.js";
 
@@ -27,7 +29,9 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  admin: typeof admin;
   characters: typeof characters;
+  env: typeof env;
   http: typeof http;
   "server/auth": typeof server_auth;
 }>;

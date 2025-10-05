@@ -47,7 +47,7 @@ export const create = mutation({
             currentDexterity: args.dexterity,
             currentIntelligence: args.intelligence,
             currentLocation: args.currentLocation,
-            characterClass: args.characterClass,
+            characterClass: args.characterClass
         })
 
         return await ctx.db.get(id)

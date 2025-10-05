@@ -18,6 +18,7 @@ import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from 'sonner'
 // Better Auth TanStack Start handler not required here
 
 interface MyRouterContext {
@@ -45,6 +46,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
+  notFoundComponent: () => (
+    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="text-center">
+        <p className="text-2xl">Página não encontrada</p>
+        <a className="underline" href="/">Voltar para a home</a>
+      </div>
+    </div>
+  ),
 
   shellComponent: RootDocument,
 })
@@ -74,6 +83,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           />
         </ConvexProvider>
         <Scripts />
+        <Toaster position='bottom-right' richColors />
       </body>
     </html>
   )

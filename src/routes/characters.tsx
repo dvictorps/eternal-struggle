@@ -1,8 +1,9 @@
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
-import { ArrowLeftIcon, PlusIcon } from 'lucide-react'
+import { ArrowLeftIcon, LogOutIcon, PlusIcon } from 'lucide-react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
+import { authClient } from '@/lib/auth-client'
 // Removed Clerk
 
 export const Route = createFileRoute('/characters')({
@@ -11,8 +12,11 @@ export const Route = createFileRoute('/characters')({
 
 function Characters() {
 
-    // const user = undefined
 
+    const { data: session } = authClient.useSession()
+
+    if (!session) return <div>Not authenticated</div>
+    const userId = session.user.id
     const createCharacter = useMutation(api.characters.create)
 
     const data = useQuery(api.characters.getAll)
@@ -38,7 +42,7 @@ function Characters() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+            <div className='min-h-screen bg-black text-white flex flex-col items-center justify-center'>
                 <div className="text-white text-xl">Loading characters...</div>
             </div>
         )
@@ -61,12 +65,12 @@ function Characters() {
 
 function ButtonRow() {
     return (
-        <div className='flex flex-row gap-2 mt-4'>
+        <div className='flex flex-row gap-5 mt-4 justify-between'>
             <Button variant="ghost" className='border border-white rounded-md flex flex-row gap-2 w-[200px] text-xl items-center'>
                 <PlusIcon className='w-4 h-4' /> Create Character
             </Button>
-            <Button variant="ghost" className='border border-white rounded-md flex flex-row gap-2 w-[200px] text-xl items-center'>
-                <ArrowLeftIcon className='w-4 h-4' /> Back to menu
+            <Button variant="ghost" className='border border-white rounded-md flex flex-row gap-2 w-[100px] text-xl items-center'>
+                <LogOutIcon className='w-4 h-4' />
             </Button>
         </div>
     )
