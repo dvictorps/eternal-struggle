@@ -9,6 +9,7 @@
  */
 
 import type * as admin from "../admin.js";
+import type * as characterClasses from "../characterClasses.js";
 import type * as characters from "../characters.js";
 import type * as env from "../env.js";
 import type * as http from "../http.js";
@@ -30,6 +31,7 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
+  characterClasses: typeof characterClasses;
   characters: typeof characters;
   env: typeof env;
   http: typeof http;
