@@ -2,9 +2,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormLabel, FormItem, FormField } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useAlertModal } from '@/hooks/use-alert-modal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createFileRoute } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
+import { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
 import { TrashIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -16,6 +18,7 @@ export const Route = createFileRoute('/admin/_layout/class')({
 })
 
 function CreateClass() {
+  const { openAlertModal, closeAlertModal } = useAlertModal()
 
   const schema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -58,6 +61,20 @@ function CreateClass() {
       toast.error('Failed to create class')
     }
   }
+
+  function handleDeleteCharacterClass(id: Id<"characterClasses">) {
+    openAlertModal({
+      title: 'Delete Class',
+      description: 'Are you sure you want to delete this class?',
+      onConfirm: () => deleteCharacterClass({ id }).then(() => {
+        closeAlertModal()
+        toast.success('Class deleted successfully')
+      }).catch(() => {
+        toast.error('Failed to delete class')
+      }),
+    })
+  }
+
 
   const deleteCharacterClass = useMutation(api.characterClasses.remove)
 
@@ -155,7 +172,7 @@ function CreateClass() {
               allClasses?.map((characterClass) => (
                 <div key={characterClass._id} className='flex flex-row gap-3 border border-[#2E2E2E] rounded-md px-4 py-2 justify-between'>
                   <h1 className='text-xl'>{characterClass.name}</h1>
-                  <button onClick={() => deleteCharacterClass({ id: characterClass._id })}> <TrashIcon className='w-5 h-5 text-white' /></button>
+                  <button onClick={() => handleDeleteCharacterClass(characterClass._id)}> <TrashIcon className='w-5 h-5 text-white' /></button>
                 </div>
               ))
             ) : (
