@@ -16,6 +16,7 @@ import "@fontsource/jersey-15";
 
 import type { QueryClient } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import { AdminButton } from "@/components/admin/admin-button";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AlertModalProvider } from "@/hooks/use-alert-modal";
 import { ModalProvider } from "@/hooks/use-modal";
@@ -74,6 +75,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 						<ModalProvider>
 							<AlertModalProvider>
 								{children}
+								<AdminButton />
 								<Toaster position="bottom-right" richColors />
 							</AlertModalProvider>
 						</ModalProvider>
