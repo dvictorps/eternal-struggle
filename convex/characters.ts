@@ -82,3 +82,9 @@ export const remove = mutation({
     },
 })
 
+export const getAllByProfileId = query({
+    args: { profileId: v.string() },
+    handler: async (ctx, args) => {
+        return await ctx.db.query('characters').filter((q) => q.eq(q.field('profileId'), args.profileId)).collect()
+    },
+})

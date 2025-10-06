@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import type { Id } from "convex/_generated/dataModel";
+import type { DataModel, Id } from "convex/_generated/dataModel";
 import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { LogOutIcon, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +27,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { useModal } from "@/hooks/use-modal";
 import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 import { api } from "../../convex/_generated/api";
 
 export const Route = createFileRoute("/characters")({
@@ -35,14 +37,20 @@ export const Route = createFileRoute("/characters")({
 function Characters() {
 	const { isAuthenticated, isLoading } = useConvexAuth();
 	const navigate = useNavigate();
-	const { data: session } = authClient.useSession();
+
 	if (isLoading) return null;
-	if (!isAuthenticated || !session) return navigate({ to: "/" });
+	if (!isAuthenticated) return navigate({ to: "/" });
+
 	return <CharactersContent />;
 }
 
 function CharactersContent() {
-	const data = useQuery(api.characters.getAll);
+	const { data: session } = authClient.useSession();
+	const data = useQuery(api.characters.getAllByProfileId, {
+		profileId: session?.user.id ?? "",
+	});
+	if (!session) return null;
+
 	const isLoading = data === undefined;
 
 	if (isLoading) {
@@ -57,7 +65,11 @@ function CharactersContent() {
 		<div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
 			<div className="border border-white rounded-md p-2 w-[25vw] h-[80vh] justify-start flex flex-col items-center">
 				<h1 className="text-4xl">My Characters</h1>
-				<div className="border border-white rounded-md w-[90%] h-[85%]"></div>
+				<div className="border border-white rounded-md w-[90%] h-[85%] p-2 flex flex-col gap-2 overflow-y-auto">
+					{data?.map((character) => (
+						<CharacterRow key={character._id} character={character} />
+					))}
+				</div>
 				<ButtonRow />
 			</div>
 		</div>
@@ -108,6 +120,7 @@ function ButtonRow() {
 }
 
 function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
+	const [isLoading, setIsLoading] = useState(false);
 	const createCharacter = useMutation(api.characters.create);
 	const allClasses = useQuery(api.characterClasses.getAll);
 	const { data: session } = authClient.useSession();
@@ -125,13 +138,14 @@ function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 		},
 	});
 
-	const isLoading = allClasses === undefined;
+	const loadingClasses = allClasses === undefined;
+
 	if (!session) return null;
 
 	const handleSubmit = async (values: z.infer<typeof schema>) => {
 		const selectedClass = allClasses?.find((cls) => cls._id === values.class);
 		if (!selectedClass) return null;
-
+		setIsLoading(true);
 		await createCharacter({
 			name: values.name,
 			characterClass: values.class as Id<"characterClasses">,
@@ -144,6 +158,8 @@ function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 			intelligence: selectedClass.intelligence,
 			profileId: session.user.id,
 			currentLocation: "Starting Area",
+		}).then(() => {
+			toast.success("Character created successfully");
 		});
 		form.reset();
 		closeModal();
@@ -187,11 +203,15 @@ function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										{selectOptions?.map((option) => (
-											<SelectItem key={option.value} value={option.value}>
-												{option.label}
-											</SelectItem>
-										))}
+										{loadingClasses ? (
+											<Spinner className="w-5 h-5" />
+										) : (
+											selectOptions?.map((option) => (
+												<SelectItem key={option.value} value={option.value}>
+													{option.label}
+												</SelectItem>
+											))
+										)}
 									</SelectContent>
 								</Select>
 								<FormMessage />
@@ -200,11 +220,55 @@ function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 					/>
 					<div className="flex w-full justify-center">
 						<Button type="submit" variant="outline">
-							Create Character
+							{isLoading ? <Spinner className="w-5 h-5" /> : "Create Character"}
 						</Button>
 					</div>
 				</form>
 			</Form>
 		</div>
+	);
+}
+
+function CharacterRow({
+	character,
+}: {
+	character: DataModel["characters"]["document"];
+}) {
+	const [selectedCharacter, setSelectedCharacter] = useState<
+		DataModel["characters"]["document"] | null
+	>(null);
+	const classData = useQuery(api.characterClasses.getById, {
+		id: character.characterClass,
+	});
+
+	const isSelected = selectedCharacter?._id === character._id;
+
+	if (!classData) return null;
+
+	function handleSelectCharacter() {
+		setSelectedCharacter((prev) =>
+			prev?._id === character._id ? null : character,
+		);
+	}
+
+	return (
+		<button
+			type="button"
+			className={cn(
+				"flex flex-row border rounded-md justify-between w-full p-2 transition-colors",
+				isSelected
+					? "border-white bg-white text-black"
+					: "border-white bg-transparent text-white hover:bg-white/10",
+			)}
+			onClick={handleSelectCharacter}
+		>
+			<div className="flex flex-col items-start">
+				<h1 className="text-2xl font-bold">{character.name}</h1>
+				<h1 className="text-sm opacity-80">{classData.name}</h1>
+			</div>
+			<div className="flex items-center">
+				<h1 className="text-xl">lvl. {character.level}</h1>
+			</div>
+		</button>
 	);
 }
