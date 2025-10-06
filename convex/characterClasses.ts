@@ -16,14 +16,14 @@ export const getById = query({
 })
 
 export const create = mutation({
-    args: { name: v.string(), strength: v.number(), dexterity: v.number(), intelligence: v.number(), hp: v.number(), mp: v.number() },
+    args: { name: v.string(), strength: v.number(), dexterity: v.number(), intelligence: v.number(), hp: v.number(), mp: v.number(), description: v.string() },
     handler: async (ctx, args) => {
         return await ctx.db.insert('characterClasses', args)
     },
 })
 
 export const update = mutation({
-    args: { id: v.id('characterClasses'), name: v.string(), strength: v.number(), dexterity: v.number(), intelligence: v.number(), hp: v.number(), mp: v.number() },
+    args: { id: v.id('characterClasses'), name: v.string(), strength: v.number(), dexterity: v.number(), intelligence: v.number(), hp: v.number(), mp: v.number(), description: v.string() },
     handler: async (ctx, args) => {
         const { id, ...data } = args
         return await ctx.db.patch(id, data)

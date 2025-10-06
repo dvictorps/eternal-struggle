@@ -38,6 +38,7 @@ function CreateClass() {
 			intelligence: values.intelligence,
 			hp: values.hp,
 			mp: values.mp,
+			description: values.description,
 		});
 
 		if (res) {
@@ -134,6 +135,7 @@ function ClassRow({
 				intelligence: values.intelligence,
 				hp: values.hp,
 				mp: values.mp,
+				description: values.description,
 			});
 
 			if (res) {
@@ -185,6 +187,7 @@ function ClassRow({
 					<h1>Intelligence: {characterClass.intelligence}</h1>
 					<h1>HP: {characterClass.hp}</h1>
 					<h1>MP: {characterClass.mp}</h1>
+					<h1>Description: {characterClass.description}</h1>
 				</div>
 			</AccordionContent>
 		</AccordionItem>

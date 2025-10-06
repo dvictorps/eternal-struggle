@@ -19,7 +19,7 @@ export default defineSchema({
     currentDexterity: v.number(),
     currentIntelligence: v.number(),
     currentLocation: v.string(),
-    characterClass: v.string(),
+    characterClass: v.id('characterClasses'),
   }),
   characterClasses: defineTable({
     name: v.string(),
@@ -28,16 +28,10 @@ export default defineSchema({
     intelligence: v.number(),
     hp: v.number(),
     mp: v.number(),
+    description: v.string(),
   }),
   admins: defineTable({
     userId: v.string(),
   }).index('userId', ['userId']),
-  users: defineTable({
-    userId: v.string(),
-    name: v.string(),
-    email: v.string(),
-    role: v.union(v.literal('user'), v.literal('admin')),
-  }).index('userId', ['userId']),
-
 })
 

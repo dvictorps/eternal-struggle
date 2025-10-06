@@ -27,7 +27,7 @@ export const create = mutation({
         intelligence: v.number(),
         profileId: v.string(),
         currentLocation: v.string(),
-        characterClass: v.string(),
+        characterClass: v.id('characterClasses'),
     },
     handler: async (ctx, args) => {
         const id = await ctx.db.insert('characters', {

@@ -10,6 +10,7 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "../ui/textarea";
 
 const classSchema = z.object({
 	name: z.string().min(1, "Name is required"),
@@ -18,6 +19,7 @@ const classSchema = z.object({
 	intelligence: z.number().min(1, "Intelligence is required"),
 	hp: z.number().min(1, "HP is required"),
 	mp: z.number().min(1, "MP is required"),
+	description: z.string().min(1, "Description is required"),
 });
 
 export type ClassFormValues = z.infer<typeof classSchema>;
@@ -42,6 +44,7 @@ export function ClassForm({
 			intelligence: undefined,
 			hp: undefined,
 			mp: undefined,
+			description: "",
 		},
 	});
 
@@ -156,6 +159,18 @@ export function ClassForm({
 										{...field}
 										onChange={(e) => field.onChange(Number(e.target.value))}
 									/>
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="description"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Description</FormLabel>
+								<FormControl>
+									<Textarea placeholder="Description" {...field} />
 								</FormControl>
 							</FormItem>
 						)}
