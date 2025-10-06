@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { useAlertModal } from "@/hooks/use-alert-modal";
 import { useModal } from "@/hooks/use-modal";
 
@@ -63,7 +64,11 @@ function CreateClass() {
 					<div className="flex flex-row justify-between items-center">
 						<div className="flex flex-col">
 							<h1 className="text-3xl">Classes</h1>
-							<p className=" text-gray-400 mb-1">List of classes</p>
+							<p className=" text-gray-400 mb-1">
+								All the current classes are listed here. You are able to create,
+								edit and delete them. If you delete a class, all characters that
+								have that class will be deleted.
+							</p>
 						</div>
 						<Button
 							variant="outline"
@@ -158,6 +163,15 @@ function ClassRow({
 		});
 	}
 
+	const baseStatsData = [
+		{ label: "Strength", value: characterClass.strength },
+		{ label: "Dexterity", value: characterClass.dexterity },
+		{ label: "Intelligence", value: characterClass.intelligence },
+		{ label: "HP", value: characterClass.hp },
+		{ label: "MP", value: characterClass.mp },
+		{ label: "Description", value: characterClass.description },
+	];
+
 	return (
 		<AccordionItem value={value}>
 			<AccordionTrigger className=" hover:no-underline hover:text-gray-500">
@@ -181,13 +195,13 @@ function ClassRow({
 			</AccordionTrigger>
 			<AccordionContent className="text-lg">
 				<h1 className="text-2xl">Base Stats</h1>
-				<div className="flex flex-row gap-3">
-					<h1>Strength: {characterClass.strength}</h1>
-					<h1>Dexterity: {characterClass.dexterity}</h1>
-					<h1>Intelligence: {characterClass.intelligence}</h1>
-					<h1>HP: {characterClass.hp}</h1>
-					<h1>MP: {characterClass.mp}</h1>
-					<h1>Description: {characterClass.description}</h1>
+				<div className="grid grid-cols-2 gap-3">
+					{baseStatsData.map((stat) => (
+						<div key={stat.label}>
+							<Label>{stat.label}</Label>
+							<span>{stat.value}</span>
+						</div>
+					))}
 				</div>
 			</AccordionContent>
 		</AccordionItem>

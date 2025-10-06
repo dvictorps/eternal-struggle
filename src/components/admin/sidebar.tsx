@@ -1,13 +1,18 @@
 import { Link } from "@tanstack/react-router";
-import { PlusIcon } from "lucide-react";
+import { GemIcon, PenIcon, PlusIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 export function AdminSidebar() {
 	const sidebarItems = [
 		{
-			label: "Create a class",
-			icon: PlusIcon,
+			label: "Classes",
+			icon: PenIcon,
 			to: "/admin/class",
+		},
+		{
+			label: "Items",
+			icon: GemIcon,
+			to: "/admin/items",
 		},
 	];
 	return (
