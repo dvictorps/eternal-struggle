@@ -20,7 +20,6 @@ import { Route as AdminLayoutRouteImport } from './routes/admin/_layout'
 import { Route as AdminLayoutIndexRouteImport } from './routes/admin/_layout.index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
 import { Route as AdminLayoutItemsRouteImport } from './routes/admin/_layout.items'
-import { Route as AdminLayoutClassRouteImport } from './routes/admin/_layout.class'
 
 const AdminRouteImport = createFileRoute('/admin')()
 
@@ -73,11 +72,6 @@ const AdminLayoutItemsRoute = AdminLayoutItemsRouteImport.update({
   path: '/items',
   getParentRoute: () => AdminLayoutRoute,
 } as any)
-const AdminLayoutClassRoute = AdminLayoutClassRouteImport.update({
-  id: '/class',
-  path: '/class',
-  getParentRoute: () => AdminLayoutRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -86,7 +80,6 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/admin': typeof AdminLayoutRouteWithChildren
   '/sign-in/$': typeof SignInSplatRoute
-  '/admin/class': typeof AdminLayoutClassRoute
   '/admin/items': typeof AdminLayoutItemsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/': typeof AdminLayoutIndexRoute
@@ -98,7 +91,6 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/admin': typeof AdminLayoutIndexRoute
   '/sign-in/$': typeof SignInSplatRoute
-  '/admin/class': typeof AdminLayoutClassRoute
   '/admin/items': typeof AdminLayoutItemsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -111,7 +103,6 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/admin/_layout': typeof AdminLayoutRouteWithChildren
   '/sign-in/$': typeof SignInSplatRoute
-  '/admin/_layout/class': typeof AdminLayoutClassRoute
   '/admin/_layout/items': typeof AdminLayoutItemsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/_layout/': typeof AdminLayoutIndexRoute
@@ -125,7 +116,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/admin'
     | '/sign-in/$'
-    | '/admin/class'
     | '/admin/items'
     | '/api/auth/$'
     | '/admin/'
@@ -137,7 +127,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/admin'
     | '/sign-in/$'
-    | '/admin/class'
     | '/admin/items'
     | '/api/auth/$'
   id:
@@ -149,7 +138,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/_layout'
     | '/sign-in/$'
-    | '/admin/_layout/class'
     | '/admin/_layout/items'
     | '/api/auth/$'
     | '/admin/_layout/'
@@ -237,24 +225,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutItemsRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
-    '/admin/_layout/class': {
-      id: '/admin/_layout/class'
-      path: '/class'
-      fullPath: '/admin/class'
-      preLoaderRoute: typeof AdminLayoutClassRouteImport
-      parentRoute: typeof AdminLayoutRoute
-    }
   }
 }
 
 interface AdminLayoutRouteChildren {
-  AdminLayoutClassRoute: typeof AdminLayoutClassRoute
   AdminLayoutItemsRoute: typeof AdminLayoutItemsRoute
   AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
-  AdminLayoutClassRoute: AdminLayoutClassRoute,
   AdminLayoutItemsRoute: AdminLayoutItemsRoute,
   AdminLayoutIndexRoute: AdminLayoutIndexRoute,
 }
@@ -285,3 +264,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

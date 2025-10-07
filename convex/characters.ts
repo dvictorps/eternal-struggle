@@ -1,5 +1,6 @@
 import { query, mutation } from './_generated/server'
 import { v } from 'convex/values'
+import { CHARACTER_CLASSES, ClassId } from '../gameData/classes'
 
 export const getAll = query({
     args: {},
@@ -27,9 +28,15 @@ export const create = mutation({
         intelligence: v.number(),
         profileId: v.string(),
         currentLocation: v.string(),
-        characterClass: v.id('characterClasses'),
+        characterClass: v.string(),
     },
     handler: async (ctx, args) => {
+
+        const selectedClass = CHARACTER_CLASSES[args.characterClass as ClassId]
+        if (!selectedClass) {
+            throw new Error(`Character class is invalid ${args.characterClass}`)
+        }
+           
         const id = await ctx.db.insert('characters', {
             name: args.name,
             level: args.level,
@@ -47,7 +54,7 @@ export const create = mutation({
             currentDexterity: args.dexterity,
             currentIntelligence: args.intelligence,
             currentLocation: args.currentLocation,
-            characterClass: args.characterClass
+            characterClass: selectedClass.id
         })
 
         return await ctx.db.get(id)
