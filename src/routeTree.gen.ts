@@ -17,9 +17,9 @@ import { Route as CharactersRouteImport } from './routes/characters'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
 import { Route as AdminLayoutRouteImport } from './routes/admin/_layout'
-import { Route as AdminLayoutIndexRouteImport } from './routes/admin/_layout.index'
+import { Route as AdminLayoutIndexRouteImport } from './routes/admin/_layout/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
-import { Route as AdminLayoutItemsRouteImport } from './routes/admin/_layout.items'
+import { Route as AdminLayoutItemsRouteImport } from './routes/admin/_layout/items'
 
 const AdminRouteImport = createFileRoute('/admin')()
 

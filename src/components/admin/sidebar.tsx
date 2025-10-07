@@ -2,14 +2,14 @@ import { Link } from "@tanstack/react-router";
 import { GemIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
+const sidebarItems = [
+	{
+		label: "Items",
+		icon: GemIcon,
+		to: "/admin/items",
+	},
+];
 export function AdminSidebar() {
-	const sidebarItems = [
-		{
-			label: "Items",
-			icon: GemIcon,
-			to: "/admin/items",
-		},
-	];
 	return (
 		<div className="w-16 h-screen bg-[#171717] border-r border-[#2E2E2E] fixed items-center flex flex-col group transition-all duration-300 hover:w-52">
 			<div className="w-full justify-center flex items-center py-4">
