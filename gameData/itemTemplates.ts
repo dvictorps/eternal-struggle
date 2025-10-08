@@ -147,7 +147,7 @@ export interface ArmorTemplate extends BaseItemTemplate {
   stackable: false;
   baseDefense: {
     barrier?: number;
-    armour?: number;
+    armor?: number;
     evasion?: number;
   };
   requirements?: {
