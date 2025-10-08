@@ -33,7 +33,7 @@ export function getModifierTierForItemLevel(modifierId: ModifierId, itemLevel: n
   if (!modifier.tiers) return null;
   
   const tier = modifier.tiers.find(
-    (t: ModifierTier) => itemLevel >= t.minItemLevel && itemLevel <= t.maxItemLevel
+    t => itemLevel >= t.minItemLevel && itemLevel <= t.maxItemLevel
   );
   
   return tier || null;
