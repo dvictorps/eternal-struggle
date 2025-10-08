@@ -10,6 +10,89 @@ import {
 } from './items';
 
 // ═══════════════════════════════════════════════════════════
+// COMMON MODIFIER LISTS
+// ═══════════════════════════════════════════════════════════
+
+// Modifiers for weapons - focused on damage and attack stats
+export const WEAPON_MODIFIERS: ModifierId[] = [
+  'physicalDamageFlat',
+  'coldDamageFlat',
+  'fireDamageFlat',
+  'lightningDamageFlat',
+  'voidDamageFlat',
+  'physicalDamageIncrease',
+  'attackSpeedIncrease',
+  'criticalChanceIncrease',
+  'globalPhysicalDamageIncrease',
+  'globalColdDamageIncrease',
+  'globalFireDamageIncrease',
+  'globalLightningDamageIncrease',
+  'globalVoidDamageIncrease',
+  'globalElementalDamageWithAttacksIncrease',
+  'globalAttackSpeedIncrease',
+  'globalCriticalChanceIncrease',
+  'strengthFlat',
+  'dexterityFlat'
+];
+
+// Modifiers for jewelry - comprehensive list with all types
+export const JEWELRY_MODIFIERS: ModifierId[] = [
+  // Flat damage to attacks
+  'physicalDamageFlat',
+  'coldDamageFlat',
+  'fireDamageFlat',
+  'lightningDamageFlat',
+  'voidDamageFlat',
+
+  // Global increases
+  'globalPhysicalDamageIncrease',
+  'globalColdDamageIncrease',
+  'globalFireDamageIncrease',
+  'globalLightningDamageIncrease',
+  'globalVoidDamageIncrease',
+  'globalSpellDamageIncrease',
+  'globalElementalDamageIncrease',
+  'globalElementalDamageWithAttacksIncrease',
+  'globalAttackSpeedIncrease',
+  'globalCastSpeedIncrease',
+  'globalCriticalChanceIncrease',
+
+  // Defense
+  'globalArmorIncrease',
+  'globalEvasionIncrease',
+  'globalBarrierIncrease',
+  'healthFlat',
+  'manaFlat',
+
+  // Resistances
+  'coldResistance',
+  'fireResistance',
+  'lightningResistance',
+  'voidResistance',
+
+  // Attributes
+  'strengthFlat',
+  'dexterityFlat',
+  'intelligenceFlat'
+];
+
+// Modifiers for armor - focused on defense and attributes
+export const ARMOR_MODIFIERS: ModifierId[] = [
+  'globalArmorIncrease',
+  'globalEvasionIncrease',
+  'globalBarrierIncrease',
+  'healthFlat',
+  'manaFlat',
+  'coldResistance',
+  'fireResistance',
+  'lightningResistance',
+  'voidResistance',
+  'strengthFlat',
+  'dexterityFlat',
+  'intelligenceFlat'
+];
+
+// ═══════════════════════════════════════════════════════════
 // BASE INTERFACES
 // ═══════════════════════════════════════════════════════════
 
@@ -183,26 +266,7 @@ export const ITEM_TEMPLATES = {
       level: 5,
       strength: 12
     },
-    allowedModifiers: [
-      'physicalDamageFlat',
-      'coldDamageFlat',
-      'fireDamageFlat',
-      'lightningDamageFlat',
-      'voidDamageFlat',
-      'physicalDamageIncrease',
-      'attackSpeedIncrease',
-      'criticalChanceIncrease',
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      'strengthFlat',
-      'dexterityFlat'
-    ],
+    allowedModifiers: WEAPON_MODIFIERS,
     icon: '⚔️'
   } as WeaponTemplate,
 
@@ -226,46 +290,8 @@ export const ITEM_TEMPLATES = {
     implicitMods: {
       fireResistance: [10, 20]
     },
-    allowedModifiers: [
-      // Flat damage to attacks
-      'physicalDamageFlat',
-      'coldDamageFlat',
-      'fireDamageFlat',
-      'lightningDamageFlat',
-      'voidDamageFlat',
-      
-      // Global increases
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalSpellDamageIncrease',
-      'globalElementalDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCastSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      
-      // Defense
-      'globalArmorIncrease',
-      'globalEvasionIncrease',
-      'globalBarrierIncrease',
-      'healthFlat',
-      'manaFlat',
-      
-      // Resistances
-      'coldResistance',
-      'fireResistance',
-      'lightningResistance',
-      'voidResistance',
-      
-      // Attributes
-      'strengthFlat',
-      'dexterityFlat',
-      'intelligenceFlat'
-    ],
-    icon: '💍'
+    allowedModifiers: JEWELRY_MODIFIERS,
+    icon: '⚪'
   } as JewelryTemplate,
 
   sapphireRing: {
@@ -284,36 +310,7 @@ export const ITEM_TEMPLATES = {
     implicitMods: {
       coldResistance: [15, 25]
     },
-    allowedModifiers: [
-      'physicalDamageFlat',
-      'coldDamageFlat',
-      'fireDamageFlat',
-      'lightningDamageFlat',
-      'voidDamageFlat',
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalSpellDamageIncrease',
-      'globalElementalDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCastSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      'globalArmorIncrease',
-      'globalEvasionIncrease',
-      'globalBarrierIncrease',
-      'healthFlat',
-      'manaFlat',
-      'coldResistance',
-      'fireResistance',
-      'lightningResistance',
-      'voidResistance',
-      'strengthFlat',
-      'dexterityFlat',
-      'intelligenceFlat'
-    ],
+    allowedModifiers: JEWELRY_MODIFIERS,
     icon: '💎'
   } as JewelryTemplate,
 
@@ -337,45 +334,7 @@ export const ITEM_TEMPLATES = {
     implicitMods: {
       dexterity: [20, 30]
     },
-    allowedModifiers: [
-      // Flat damage to attacks
-      'physicalDamageFlat',
-      'coldDamageFlat',
-      'fireDamageFlat',
-      'lightningDamageFlat',
-      'voidDamageFlat',
-      
-      // Global increases
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalSpellDamageIncrease',
-      'globalElementalDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCastSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      
-      // Defense
-      'globalArmorIncrease',
-      'globalEvasionIncrease',
-      'globalBarrierIncrease',
-      'healthFlat',
-      'manaFlat',
-      
-      // Resistances
-      'coldResistance',
-      'fireResistance',
-      'lightningResistance',
-      'voidResistance',
-      
-      // Attributes
-      'strengthFlat',
-      'dexterityFlat',
-      'intelligenceFlat'
-    ],
+    allowedModifiers: JEWELRY_MODIFIERS,
     icon: '📿'
   } as JewelryTemplate,
 
@@ -395,37 +354,8 @@ export const ITEM_TEMPLATES = {
     implicitMods: {
       strength: [20, 30]
     },
-    allowedModifiers: [
-      'physicalDamageFlat',
-      'coldDamageFlat',
-      'fireDamageFlat',
-      'lightningDamageFlat',
-      'voidDamageFlat',
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalSpellDamageIncrease',
-      'globalElementalDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCastSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      'globalArmorIncrease',
-      'globalEvasionIncrease',
-      'globalBarrierIncrease',
-      'healthFlat',
-      'manaFlat',
-      'coldResistance',
-      'fireResistance',
-      'lightningResistance',
-      'voidResistance',
-      'strengthFlat',
-      'dexterityFlat',
-      'intelligenceFlat'
-    ],
-    icon: '🟡'
+    allowedModifiers: JEWELRY_MODIFIERS,
+    icon: '🔶'
   } as JewelryTemplate,
 
   lapisAmulet: {
@@ -444,36 +374,7 @@ export const ITEM_TEMPLATES = {
     implicitMods: {
       intelligence: [20, 30]
     },
-    allowedModifiers: [
-      'physicalDamageFlat',
-      'coldDamageFlat',
-      'fireDamageFlat',
-      'lightningDamageFlat',
-      'voidDamageFlat',
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalSpellDamageIncrease',
-      'globalElementalDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCastSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      'globalArmorIncrease',
-      'globalEvasionIncrease',
-      'globalBarrierIncrease',
-      'healthFlat',
-      'manaFlat',
-      'coldResistance',
-      'fireResistance',
-      'lightningResistance',
-      'voidResistance',
-      'strengthFlat',
-      'dexterityFlat',
-      'intelligenceFlat'
-    ],
+    allowedModifiers: JEWELRY_MODIFIERS,
     icon: '🔵'
   } as JewelryTemplate,
 
@@ -497,39 +398,8 @@ export const ITEM_TEMPLATES = {
     implicitMods: {
       strength: [15, 25]
     },
-    allowedModifiers: [
-      // Global increases
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalSpellDamageIncrease',
-      'globalElementalDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCastSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      
-      // Defense
-      'globalArmorIncrease',
-      'globalEvasionIncrease',
-      'globalBarrierIncrease',
-      'healthFlat',
-      'manaFlat',
-      
-      // Resistances
-      'coldResistance',
-      'fireResistance',
-      'lightningResistance',
-      'voidResistance',
-      
-      // Attributes
-      'strengthFlat',
-      'dexterityFlat',
-      'intelligenceFlat'
-    ],
-    icon: '🔗'
+    allowedModifiers: JEWELRY_MODIFIERS,
+    icon: '👝'
   } as JewelryTemplate,
 
   chainBelt: {
@@ -548,31 +418,7 @@ export const ITEM_TEMPLATES = {
     implicitMods: {
       strength: [20, 30]
     },
-    allowedModifiers: [
-      'globalPhysicalDamageIncrease',
-      'globalColdDamageIncrease',
-      'globalFireDamageIncrease',
-      'globalLightningDamageIncrease',
-      'globalVoidDamageIncrease',
-      'globalSpellDamageIncrease',
-      'globalElementalDamageIncrease',
-      'globalElementalDamageWithAttacksIncrease',
-      'globalAttackSpeedIncrease',
-      'globalCastSpeedIncrease',
-      'globalCriticalChanceIncrease',
-      'globalArmorIncrease',
-      'globalEvasionIncrease',
-      'globalBarrierIncrease',
-      'healthFlat',
-      'manaFlat',
-      'coldResistance',
-      'fireResistance',
-      'lightningResistance',
-      'voidResistance',
-      'strengthFlat',
-      'dexterityFlat',
-      'intelligenceFlat'
-    ],
+    allowedModifiers: JEWELRY_MODIFIERS,
     icon: '⛓️'
   } as JewelryTemplate,
 
@@ -601,9 +447,13 @@ export function getTemplatesByCategory(category: ItemCategory): ItemTemplate[] {
 // Helper para pegar jewelry templates
 export function getJewelryTemplates(): JewelryTemplate[] {
   return Object.values(ITEM_TEMPLATES).filter(
-    template => template.categories.includes('equipment') && 
-                'implicitMods' in template
-  ) as JewelryTemplate[];
+    (template): template is JewelryTemplate => 
+      'equipmentType' in template && (
+        template.equipmentType === 'ring' || 
+        template.equipmentType === 'amulet' || 
+        template.equipmentType === 'belt'
+      )
+  );
 }
 
 // Helper para pegar templates por equipment type

@@ -156,7 +156,7 @@ export type WeaponType = keyof typeof WEAPON_TYPES;
 
 // 4. TIPOS DE ARMADURA
 export const ARMOR_TYPES = {
-  cloth: {
+  silk: {
     id: 'silk',
     name:'Silk',
     baseDefense: 'barrier',
@@ -280,6 +280,9 @@ export const MODIFIER_TYPES = {
 
 export type ModifierType = typeof MODIFIER_TYPES[keyof typeof MODIFIER_TYPES];
 
+// Type for applicableTo property in modifiers
+export type ModifierApplicableTo = EquipmentType | WeaponType;
+
 // 9. TIER STRUCTURE
 interface ModifierTier {
   tier: number; // 1-10 (1 = best, 10 = worst)
@@ -288,11 +291,26 @@ interface ModifierTier {
   valueRange: readonly [number, number];
 }
 
+// Interface for modifier objects
+export interface Modifier {
+  id: string;
+  name: string;
+  category: string;
+  type: string;
+  applicableTo: ModifierApplicableTo[];
+  prefix?: string;
+  suffix?: string;
+  displayFormat?: string;
+  isGlobalStat?: boolean;
+  tiers?: ModifierTier[];
+  tier?: ModifierTier;
+}
+
 // ═══════════════════════════════════════════════════════════
 // 🎯 MODIFIERS COM TIERS
 // ═══════════════════════════════════════════════════════════
 
-export const MODIFIERS = {
+export const MODIFIERS: { [key: string]: Modifier } = {
   // ═══════════════════════════════════════════════════════════
   // ⚔️ WEAPON DAMAGE - ATTACK (LOCAL & FLAT)
   // ═══════════════════════════════════════════════════════════
@@ -1328,7 +1346,7 @@ export type ModifierId = keyof typeof MODIFIERS;
 // Helper para pegar tier apropriado baseado no item level
 export function getModifierTierForItemLevel(modifierId: ModifierId, itemLevel: number): ModifierTier | null {
   const modifier = MODIFIERS[modifierId];
-  if (!('tiers' in modifier)) return null;
+  if (!modifier.tiers) return null;
   
   const tier = modifier.tiers.find(
     t => itemLevel >= t.minItemLevel && itemLevel <= t.maxItemLevel

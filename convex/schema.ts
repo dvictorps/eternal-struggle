@@ -27,7 +27,7 @@ export default defineSchema({
   inventory: defineTable({
     characterId: v.id('characters'),
     itemId: v.id('items'),
-  }),
+  }).index('by_characterId', ['characterId']),
   items: defineTable({
     name: v.string(),
     description: v.string(),
