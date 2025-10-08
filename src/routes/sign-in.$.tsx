@@ -11,10 +11,12 @@ export const Route = createFileRoute("/sign-in/$")({
 
 function Page() {
 	const { isAuthenticated } = useConvexAuth();
+
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
 
 	if (isAuthenticated) navigate({ to: "/" });
+
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		setIsLoading(true);
 		e.preventDefault();

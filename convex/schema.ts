@@ -2,6 +2,9 @@ import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 
 export default defineSchema({
+  admins: defineTable({
+    userId: v.string(),
+  }).index('userId', ['userId']),
   characters: defineTable({
     name: v.string(),
     level: v.number(),
@@ -19,19 +22,19 @@ export default defineSchema({
     currentDexterity: v.number(),
     currentIntelligence: v.number(),
     currentLocation: v.string(),
-    characterClass: v.id('characterClasses'),
+    characterClass: v.string(),
   }),
-  characterClasses: defineTable({
+  inventory: defineTable({
+    characterId: v.id('characters'),
+    itemId: v.id('items'),
+  }).index('by_characterId', ['characterId']),
+  items: defineTable({
     name: v.string(),
-    strength: v.number(),
-    dexterity: v.number(),
-    intelligence: v.number(),
-    hp: v.number(),
-    mp: v.number(),
     description: v.string(),
+    type: v.string(),
+    rarity: v.string(),
+    value: v.number(),
   }),
-  admins: defineTable({
-    userId: v.string(),
-  }).index('userId', ['userId']),
+ 
 })
 

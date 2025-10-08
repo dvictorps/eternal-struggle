@@ -30,6 +30,7 @@ import { useModal } from "@/hooks/use-modal";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { api } from "../../convex/_generated/api";
+import { CHARACTER_CLASSES, type ClassId } from "../../gameData/classes";
 
 export const Route = createFileRoute("/characters")({
 	component: Characters,
@@ -177,7 +178,7 @@ function ButtonRow({
 function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const createCharacter = useMutation(api.characters.create);
-	const allClasses = useQuery(api.characterClasses.getAll);
+
 	const { data: session } = authClient.useSession();
 
 	const schema = z.object({
@@ -193,17 +194,16 @@ function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 		},
 	});
 
-	const loadingClasses = allClasses === undefined;
-
 	if (!session) return null;
 
 	const handleSubmit = async (values: z.infer<typeof schema>) => {
-		const selectedClass = allClasses?.find((cls) => cls._id === values.class);
+		const selectedClass = CHARACTER_CLASSES[values.class as ClassId];
+
 		if (!selectedClass) return null;
 		setIsLoading(true);
 		await createCharacter({
 			name: values.name,
-			characterClass: values.class as Id<"characterClasses">,
+			characterClass: selectedClass.id,
 			level: 1,
 			xp: 0,
 			hp: selectedClass.hp,
@@ -220,9 +220,9 @@ function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 		closeModal();
 	};
 
-	const selectOptions = allClasses?.map((cls) => ({
+	const selectOptions = Object.values(CHARACTER_CLASSES).map((cls) => ({
 		label: cls.name,
-		value: cls._id,
+		value: cls.id,
 	}));
 
 	return (
@@ -258,15 +258,11 @@ function CreateCharacterModal({ closeModal }: { closeModal: () => void }) {
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										{loadingClasses ? (
-											<Spinner className="w-5 h-5" />
-										) : (
-											selectOptions?.map((option) => (
-												<SelectItem key={option.value} value={option.value}>
-													{option.label}
-												</SelectItem>
-											))
-										)}
+										{selectOptions?.map((option) => (
+											<SelectItem key={option.value} value={option.value}>
+												{option.label}
+											</SelectItem>
+										))}
 									</SelectContent>
 								</Select>
 								<FormMessage />
@@ -293,9 +289,7 @@ function CharacterRow({
 	selectedCharacter: CharacterData | null;
 	setSelectedCharacter: (character: CharacterData | null) => void;
 }) {
-	const classData = useQuery(api.characterClasses.getById, {
-		id: character.characterClass,
-	});
+	const classData = CHARACTER_CLASSES[character.characterClass as ClassId];
 
 	const isSelected = selectedCharacter?._id === character._id;
 
