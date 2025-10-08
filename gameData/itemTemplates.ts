@@ -9,7 +9,10 @@ import {
   DamageType
 } from './items';
 
-// Base para todos os itens
+// ═══════════════════════════════════════════════════════════
+// BASE INTERFACES
+// ═══════════════════════════════════════════════════════════
+
 export interface BaseItemTemplate {
   id: string;
   name: string;
@@ -22,7 +25,10 @@ export interface BaseItemTemplate {
   itemLevel: number;
 }
 
-// Template para armas
+// ═══════════════════════════════════════════════════════════
+// WEAPON TEMPLATE
+// ═══════════════════════════════════════════════════════════
+
 export interface WeaponTemplate extends BaseItemTemplate {
   categories: ['equipment'];
   equipmentType: 'weapon';
@@ -47,12 +53,15 @@ export interface WeaponTemplate extends BaseItemTemplate {
   allowedModifiers: ModifierId[];
 }
 
-// Template para armaduras
+// ═══════════════════════════════════════════════════════════
+// ARMOR TEMPLATE
+// ═══════════════════════════════════════════════════════════
+
 export interface ArmorTemplate extends BaseItemTemplate {
   categories: ['equipment'];
-  equipmentType: Exclude<EquipmentType, 'weapon' | 'offhand'>; // ← ajustado
+  equipmentType: Exclude<EquipmentType, 'weapon' | 'offhand' | 'ring' | 'amulet' | 'belt'>;
   armorType: ArmorType;
-  stackable: false; // ← adicionado
+  stackable: false;
   baseDefense: {
     barrier?: number;
     armour?: number;
@@ -67,18 +76,41 @@ export interface ArmorTemplate extends BaseItemTemplate {
   allowedModifiers: ModifierId[];
 }
 
-// Template para acessórios (ring, amulet)
-export interface AccessoryTemplate extends BaseItemTemplate {
+// ═══════════════════════════════════════════════════════════
+// 🆕 JEWELRY TEMPLATE (Ring, Amulet, Belt)
+// ═══════════════════════════════════════════════════════════
+
+export interface JewelryTemplate extends BaseItemTemplate {
   categories: ['equipment'];
-  equipmentType: 'ring' | 'amulet';
+  equipmentType: 'ring' | 'amulet' | 'belt';
   stackable: false;
+  
+  // Implicits (sempre presentes, não contam para mod count)
+  implicitMods?: {
+    // Para Rings e Belts: resistências
+    coldResistance?: [number, number];
+    fireResistance?: [number, number];
+    lightningResistance?: [number, number];
+    voidResistance?: [number, number];
+    
+    // Para Amulets e Belts: atributos
+    strength?: [number, number];
+    dexterity?: [number, number];
+    intelligence?: [number, number];
+  };
+  
   requirements?: {
     level?: number;
   };
+  
+  // Mods procedurais (rolados aleatoriamente)
   allowedModifiers: ModifierId[];
 }
 
-// Template para consumíveis
+// ═══════════════════════════════════════════════════════════
+// CONSUMABLE TEMPLATE
+// ═══════════════════════════════════════════════════════════
+
 export interface ConsumableTemplate extends BaseItemTemplate {
   categories: ['consumable'];
   consumableType: ConsumableType;
@@ -90,74 +122,468 @@ export interface ConsumableTemplate extends BaseItemTemplate {
   }[];
 }
 
-// Template para materiais
+// ═══════════════════════════════════════════════════════════
+// MATERIAL TEMPLATE
+// ═══════════════════════════════════════════════════════════
+
 export interface MaterialTemplate extends BaseItemTemplate {
   categories: ['material'];
   stackable: true;
   tier: number;
 }
 
-// Template para itens de quest
+// ═══════════════════════════════════════════════════════════
+// QUEST ITEM TEMPLATE
+// ═══════════════════════════════════════════════════════════
+
 export interface QuestItemTemplate extends BaseItemTemplate {
   categories: ['quest'];
-  stackable: boolean; // pode ou não stackar
+  stackable: boolean;
   questId?: string;
 }
 
-// Union type de todos os templates
+// ═══════════════════════════════════════════════════════════
+// UNION TYPE
+// ═══════════════════════════════════════════════════════════
+
 export type ItemTemplate = 
   | WeaponTemplate 
   | ArmorTemplate
-  | AccessoryTemplate // ← adicionado
+  | JewelryTemplate
   | ConsumableTemplate 
   | MaterialTemplate 
   | QuestItemTemplate
   | BaseItemTemplate;
 
-// Objeto principal com todos os templates
+// ═══════════════════════════════════════════════════════════
+// ITEM TEMPLATES CATALOG
+// ═══════════════════════════════════════════════════════════
+
 export const ITEM_TEMPLATES = {
+  
+  // ═══════════════════════════════════════════════════════════
+  // ⚔️ WEAPONS
+  // ═══════════════════════════════════════════════════════════
+  
   ironSword: {
-      id: 'ironSword',
-      name: 'Iron Sword',
-      description: 'A sturdy sword made of iron',
-      categories: ['equipment'],
-      equipmentType: 'weapon',
-      weaponType: 'sword',
-      stackable: false,
-      damageType: 'attack',
-      baseDamage: {
-        physical: [12, 18]
-      },
-      baseValue: 150,
-      itemLevel: 5,
-      requirements: {
-        level: 5,
-        strength: 12
-      },
-      allowedModifiers: [
-        'physicalDamageFlat',
-        'coldDamageFlat',
-        'fireDamageFlat',
-        'lightningDamageFlat',
-        'voidDamageFlat',
-        'attackSpeedIncrease',
-        'criticalChanceIncrease',
-        'globalPhysicalDamageIncrease',
-        'globalColdDamageIncrease',
-        'globalFireDamageIncrease',
-        'globalLightningDamageIncrease',
-        'globalVoidDamageIncrease',
-        'globalAttackSpeedIncrease',
-        'strengthFlat'
-      ],
-      icon: '⚔️'
-    } as WeaponTemplate,
+    id: 'ironSword',
+    name: 'Iron Sword',
+    description: 'A sturdy sword made of iron',
+    categories: ['equipment'],
+    equipmentType: 'weapon',
+    weaponType: 'sword',
+    stackable: false,
+    damageType: 'attack',
+    baseDamage: {
+      physical: [12, 18]
+    },
+    baseValue: 150,
+    itemLevel: 5,
+    requirements: {
+      level: 5,
+      strength: 12
+    },
+    allowedModifiers: [
+      'physicalDamageFlat',
+      'coldDamageFlat',
+      'fireDamageFlat',
+      'lightningDamageFlat',
+      'voidDamageFlat',
+      'physicalDamageIncrease',
+      'attackSpeedIncrease',
+      'criticalChanceIncrease',
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      'strengthFlat',
+      'dexterityFlat'
+    ],
+    icon: '⚔️'
+  } as WeaponTemplate,
+
+  // ═══════════════════════════════════════════════════════════
+  // 💍 JEWELRY - RINGS
+  // ═══════════════════════════════════════════════════════════
+
+  ironRing: {
+    id: 'ironRing',
+    name: 'Iron Ring',
+    description: 'A simple iron ring with natural fire resistance',
+    categories: ['equipment'],
+    equipmentType: 'ring',
+    stackable: false,
+    baseValue: 50,
+    itemLevel: 1,
+    requirements: {
+      level: 1
+    },
+    // Implicit: sempre tem fire resistance
+    implicitMods: {
+      fireResistance: [10, 20]
+    },
+    allowedModifiers: [
+      // Flat damage to attacks
+      'physicalDamageFlat',
+      'coldDamageFlat',
+      'fireDamageFlat',
+      'lightningDamageFlat',
+      'voidDamageFlat',
+      
+      // Global increases
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalSpellDamageIncrease',
+      'globalElementalDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCastSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      
+      // Defense
+      'globalArmorIncrease',
+      'globalEvasionIncrease',
+      'globalBarrierIncrease',
+      'healthFlat',
+      'manaFlat',
+      
+      // Resistances
+      'coldResistance',
+      'fireResistance',
+      'lightningResistance',
+      'voidResistance',
+      
+      // Attributes
+      'strengthFlat',
+      'dexterityFlat',
+      'intelligenceFlat'
+    ],
+    icon: '💍'
+  } as JewelryTemplate,
+
+  sapphireRing: {
+    id: 'sapphireRing',
+    name: 'Sapphire Ring',
+    description: 'A ring set with a brilliant sapphire, cold to the touch',
+    categories: ['equipment'],
+    equipmentType: 'ring',
+    stackable: false,
+    baseValue: 80,
+    itemLevel: 15,
+    requirements: {
+      level: 15
+    },
+    // Implicit: cold resistance
+    implicitMods: {
+      coldResistance: [15, 25]
+    },
+    allowedModifiers: [
+      'physicalDamageFlat',
+      'coldDamageFlat',
+      'fireDamageFlat',
+      'lightningDamageFlat',
+      'voidDamageFlat',
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalSpellDamageIncrease',
+      'globalElementalDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCastSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      'globalArmorIncrease',
+      'globalEvasionIncrease',
+      'globalBarrierIncrease',
+      'healthFlat',
+      'manaFlat',
+      'coldResistance',
+      'fireResistance',
+      'lightningResistance',
+      'voidResistance',
+      'strengthFlat',
+      'dexterityFlat',
+      'intelligenceFlat'
+    ],
+    icon: '💎'
+  } as JewelryTemplate,
+
+  // ═══════════════════════════════════════════════════════════
+  // 📿 JEWELRY - AMULETS
+  // ═══════════════════════════════════════════════════════════
+
+  jadeAmulet: {
+    id: 'jadeAmulet',
+    name: 'Jade Amulet',
+    description: 'An amulet carved from jade, enhancing dexterity',
+    categories: ['equipment'],
+    equipmentType: 'amulet',
+    stackable: false,
+    baseValue: 100,
+    itemLevel: 1,
+    requirements: {
+      level: 1
+    },
+    // Implicit: dexterity
+    implicitMods: {
+      dexterity: [20, 30]
+    },
+    allowedModifiers: [
+      // Flat damage to attacks
+      'physicalDamageFlat',
+      'coldDamageFlat',
+      'fireDamageFlat',
+      'lightningDamageFlat',
+      'voidDamageFlat',
+      
+      // Global increases
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalSpellDamageIncrease',
+      'globalElementalDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCastSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      
+      // Defense
+      'globalArmorIncrease',
+      'globalEvasionIncrease',
+      'globalBarrierIncrease',
+      'healthFlat',
+      'manaFlat',
+      
+      // Resistances
+      'coldResistance',
+      'fireResistance',
+      'lightningResistance',
+      'voidResistance',
+      
+      // Attributes
+      'strengthFlat',
+      'dexterityFlat',
+      'intelligenceFlat'
+    ],
+    icon: '📿'
+  } as JewelryTemplate,
+
+  amberAmulet: {
+    id: 'amberAmulet',
+    name: 'Amber Amulet',
+    description: 'An amulet of polished amber, granting strength',
+    categories: ['equipment'],
+    equipmentType: 'amulet',
+    stackable: false,
+    baseValue: 100,
+    itemLevel: 1,
+    requirements: {
+      level: 1
+    },
+    // Implicit: strength
+    implicitMods: {
+      strength: [20, 30]
+    },
+    allowedModifiers: [
+      'physicalDamageFlat',
+      'coldDamageFlat',
+      'fireDamageFlat',
+      'lightningDamageFlat',
+      'voidDamageFlat',
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalSpellDamageIncrease',
+      'globalElementalDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCastSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      'globalArmorIncrease',
+      'globalEvasionIncrease',
+      'globalBarrierIncrease',
+      'healthFlat',
+      'manaFlat',
+      'coldResistance',
+      'fireResistance',
+      'lightningResistance',
+      'voidResistance',
+      'strengthFlat',
+      'dexterityFlat',
+      'intelligenceFlat'
+    ],
+    icon: '🟡'
+  } as JewelryTemplate,
+
+  lapisAmulet: {
+    id: 'lapisAmulet',
+    name: 'Lapis Amulet',
+    description: 'An amulet of deep blue lapis lazuli, sharpening the mind',
+    categories: ['equipment'],
+    equipmentType: 'amulet',
+    stackable: false,
+    baseValue: 100,
+    itemLevel: 1,
+    requirements: {
+      level: 1
+    },
+    // Implicit: intelligence
+    implicitMods: {
+      intelligence: [20, 30]
+    },
+    allowedModifiers: [
+      'physicalDamageFlat',
+      'coldDamageFlat',
+      'fireDamageFlat',
+      'lightningDamageFlat',
+      'voidDamageFlat',
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalSpellDamageIncrease',
+      'globalElementalDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCastSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      'globalArmorIncrease',
+      'globalEvasionIncrease',
+      'globalBarrierIncrease',
+      'healthFlat',
+      'manaFlat',
+      'coldResistance',
+      'fireResistance',
+      'lightningResistance',
+      'voidResistance',
+      'strengthFlat',
+      'dexterityFlat',
+      'intelligenceFlat'
+    ],
+    icon: '🔵'
+  } as JewelryTemplate,
+
+  // ═══════════════════════════════════════════════════════════
+  // 🔗 JEWELRY - BELTS
+  // ═══════════════════════════════════════════════════════════
+
+  leatherBelt: {
+    id: 'leatherBelt',
+    name: 'Leather Belt',
+    description: 'A sturdy leather belt that provides extra vitality',
+    categories: ['equipment'],
+    equipmentType: 'belt',
+    stackable: false,
+    baseValue: 75,
+    itemLevel: 1,
+    requirements: {
+      level: 1
+    },
+    // Implicit: strength (belts têm attribute implicit)
+    implicitMods: {
+      strength: [15, 25]
+    },
+    allowedModifiers: [
+      // Global increases
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalSpellDamageIncrease',
+      'globalElementalDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCastSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      
+      // Defense
+      'globalArmorIncrease',
+      'globalEvasionIncrease',
+      'globalBarrierIncrease',
+      'healthFlat',
+      'manaFlat',
+      
+      // Resistances
+      'coldResistance',
+      'fireResistance',
+      'lightningResistance',
+      'voidResistance',
+      
+      // Attributes
+      'strengthFlat',
+      'dexterityFlat',
+      'intelligenceFlat'
+    ],
+    icon: '🔗'
+  } as JewelryTemplate,
+
+  chainBelt: {
+    id: 'chainBelt',
+    name: 'Chain Belt',
+    description: 'A belt of interlocking chains, enhancing defenses',
+    categories: ['equipment'],
+    equipmentType: 'belt',
+    stackable: false,
+    baseValue: 90,
+    itemLevel: 10,
+    requirements: {
+      level: 10
+    },
+    // Implicit: strength
+    implicitMods: {
+      strength: [20, 30]
+    },
+    allowedModifiers: [
+      'globalPhysicalDamageIncrease',
+      'globalColdDamageIncrease',
+      'globalFireDamageIncrease',
+      'globalLightningDamageIncrease',
+      'globalVoidDamageIncrease',
+      'globalSpellDamageIncrease',
+      'globalElementalDamageIncrease',
+      'globalElementalDamageWithAttacksIncrease',
+      'globalAttackSpeedIncrease',
+      'globalCastSpeedIncrease',
+      'globalCriticalChanceIncrease',
+      'globalArmorIncrease',
+      'globalEvasionIncrease',
+      'globalBarrierIncrease',
+      'healthFlat',
+      'manaFlat',
+      'coldResistance',
+      'fireResistance',
+      'lightningResistance',
+      'voidResistance',
+      'strengthFlat',
+      'dexterityFlat',
+      'intelligenceFlat'
+    ],
+    icon: '⛓️'
+  } as JewelryTemplate,
 
 } as const;
 
 export type ItemTemplateId = keyof typeof ITEM_TEMPLATES;
 
-// Helpers
+// ═══════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ═══════════════════════════════════════════════════════════
+
 export function getItemTemplate(id: string): ItemTemplate | undefined {
   return ITEM_TEMPLATES[id as ItemTemplateId];
 }
@@ -169,5 +595,20 @@ export function isValidItemTemplate(id: string): id is ItemTemplateId {
 export function getTemplatesByCategory(category: ItemCategory): ItemTemplate[] {
   return Object.values(ITEM_TEMPLATES).filter(
     template => (template.categories as readonly ItemCategory[]).includes(category)
+  );
+}
+
+// Helper para pegar jewelry templates
+export function getJewelryTemplates(): JewelryTemplate[] {
+  return Object.values(ITEM_TEMPLATES).filter(
+    template => template.categories.includes('equipment') && 
+                'implicitMods' in template
+  ) as JewelryTemplate[];
+}
+
+// Helper para pegar templates por equipment type
+export function getTemplatesByEquipmentType(type: EquipmentType): ItemTemplate[] {
+  return Object.values(ITEM_TEMPLATES).filter(
+    template => 'equipmentType' in template && template.equipmentType === type
   );
 }
